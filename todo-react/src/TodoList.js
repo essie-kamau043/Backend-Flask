@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const TodoList = ({ token, setToken }) => {
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
+  const [newTodo, setNewTodo] = useState("");console.log("Todos fetched:", todos)
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -16,6 +16,9 @@ const Signup = () => {
       .then((response) => {
         console.log("Signup successful!:", response.data);
         alert("Account created! Please login.");
+
+        setUsername("");
+        setPassword("");
         navigate("/login");
       })
       .catch((error) => {

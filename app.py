@@ -9,12 +9,13 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this to something secure
+app.config['JWT_SECRET_KEY'] = 'super-secret' 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True, expose_headers=["Authorization"])
+
 
 # Todo Model
 class Todo(db.Model):
@@ -23,17 +24,16 @@ class Todo(db.Model):
     done = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
-user = db.relationship('User', backref=db.backref('todos', lazy=True))
+
 
 # User Model (for authentication)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    todos = db.relationship('Todo', backref='user', lazy=True)
 
-# Create the database tables if they don't exist
-with app.app_context():
-    db.create_all()
+
 
 # Helper function to validate passwords
 def validate_password(password):
@@ -133,6 +133,8 @@ def add_todo():
 @jwt_required()
 def update_todo(todo_id):
     todo = Todo.query.get(todo_id)
+    if not todo:
+        return jsonify({'message': 'Task not found'}), 404
     todo.done = not todo.done
     db.session.commit()
     return jsonify({'task_id': todo.task_id, 'name': todo.name, 'done': todo.done})
@@ -142,6 +144,8 @@ def update_todo(todo_id):
 @jwt_required()
 def delete_todo(todo_id):
     todo = Todo.query.get(todo_id)
+    if not todo:
+        return jsonify({'message': 'Task not found'}), 404
     db.session.delete(todo)
     db.session.commit()
     return jsonify({'message': 'Task deleted'})
