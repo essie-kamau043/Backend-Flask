@@ -1,0 +1,63 @@
+/* TodoList.css */
+.todo-container {
+    background-color: #f0f8ff;
+    min-height: 100vh;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .todo-nav {
+    background-color: #e6f3ff;
+    border-radius: 10px;
+    padding: 15px;
+  }
+  
+  .todo-nav-link {
+    color: #333;
+    border-radius: 5px;
+  }
+  
+  .todo-nav-link:hover {
+    background-color: #b3d9ff;
+    color: #000;
+  }
+  
+  .todo-nav-link.active {
+    background-color: #80bfff;
+    color: #fff;
+  }
+  
+  .todo-form {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .todo-list {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .todo-list-item {
+    background: #f9f9f9;
+    border: none;
+    margin-bottom: 5px;
+    transition: background 0.3s;
+  }
+  
+  .todo-list-item:hover {
+    background-color: #e9e9e9;
+  }
+  
+  .todo-button {
+    background-color: #007bff;
+    border: none;
+  }
+  
+  .todo-button:hover {
+    background-color: #0056b3;
+  }

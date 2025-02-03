@@ -1,40 +1,57 @@
-// src/Signup.js
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import './signup.css'; 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SignupForm from './SignupForm'; // Assuming SignupForm is in the same directory
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // Using useState here
 
-  const handleSignup = () => {
-    console.log('Signup request data:', { username, password });
+  const handleSignup = (email) => {
+    setIsLoading(true); // Set loading state
+    const signupData = { email }; 
 
     axios
-      .post("http://127.0.0.1:5000/signup", { username, password })
+      .post("http://127.0.0.1:5000/signup", signupData)
       .then((response) => {
         console.log("Signup successful!:", response.data);
-        alert("Account created! Please login.");
-
-        setUsername("");
-        setPassword("");
+        toast.success("Account created! Please login.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         navigate("/login");
       })
       .catch((error) => {
         console.error("Signup failed:", error.response);
-        alert("Signup failed. Please try again.");
-      });
-    };
-
+        toast.error("Signup failed. Please try again.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .finally(() => setIsLoading(false)); // Reset loading state
+  };
 
   return (
-    <div>
-      <h1>Signup</h1>
-      <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleSignup}>Sign Up</button>
-      <p>Already have an account? <Link to="/login">Login</Link></p>
+    <div className="signup-page">
+      <div className="signup-form">
+        <h1>Signup</h1>
+        <SignupForm onSubmit={handleSignup} />
+        <p>Already have an account? <Link to="/login">Login</Link></p>
+        {isLoading && <p>Loading...</p>} 
+      </div>
     </div>
   );
 };

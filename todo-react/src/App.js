@@ -5,6 +5,9 @@ import "./styles.css";
 import Login from "./Login";
 import Signup from "./Signup";
 import TodoList from "./TodoList";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
@@ -20,6 +23,27 @@ const App = () => {
           if (error.response && error.response.status === 401) {
             localStorage.removeItem("token");
             setToken("");
+            const toastOptions = {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            };
+            toast.error("Your session has expired. Please login again.", toastOptions);
+          } else {
+            const toastOptions = {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            };
+            toast.error("An error occurred while fetching your todos.", toastOptions);
           }
         });
     }
@@ -45,6 +69,7 @@ const App = () => {
           />
         </Routes>
       </div>
+      <ToastContainer />  
     </Router>
   );
 };

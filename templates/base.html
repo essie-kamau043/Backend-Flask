@@ -8,6 +8,15 @@
 </head>
 <body>
     <div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <h1>To Do List</h1>
         <form action="/add" method="post">
         <div>
@@ -16,19 +25,21 @@
          <button type="submit">Add Task</button>
         </div>
     </form><br><br>
-    <table>
+    <table class="responsive-table">
         <tbody>
             {% for todo in todo_list %}
             <tr>
-                <td>{{ todo.task_id }}</td>
-                <td>{{ todo.name }}</td>
-                {% if todo.done == False %}
-                <td>Not Done</td>
-                {% else %}
-                <td>Done</td>
-                {% endif %}
-                <td><a href="/update/{{ todo.task_id }}">Update</a></td>
-                <td><a href="/delete/{{ todo.task_id }}">Delete</a></td>
+            <td data-title="Task ID">{{ todo.task_id }}</td>
+            <td data-title="Name">{{ todo.name }}</td>
+            <td data-title="Status">
+    {% if todo.done == False %}
+        Not Done
+    {% else %}
+        Done
+    {% endif %}
+            </td>
+            <td data-title="Action"><a href="/update/{{ todo.task_id }}">Update</a></td>
+            <td data-title="Action"><a href="/delete/{{ todo.task_id }}">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
