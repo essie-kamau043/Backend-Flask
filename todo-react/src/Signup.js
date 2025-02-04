@@ -14,6 +14,11 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = (formData) => {
+    const { username, password, email } = formData;
+  if (!username || !password || !email) {
+    toast.error("All fields are required.", toastOptions);
+    return;
+  }
     setIsLoading(true);
 
     axios
@@ -27,6 +32,7 @@ const Signup = () => {
       })
       .catch((error) => {
         console.error("Signup failed:", error);
+        console.error("Error details:", JSON.stringify(error, null, 2));
         
         if (error.response) {
           let errorMessage = error.response.data?.msg || "An error occurred during signup. Please try again.";

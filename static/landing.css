@@ -1,18 +1,18 @@
-/* Reset some default styles for consistency */
+
 body, h1, p {
     margin: 0;
     padding: 0;
   }
   
-  /* Basic body styles */
+  
   body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
   }
   
-  /* Center and style the container */
-  .landing-page {
+ 
+  .container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,14 +22,14 @@ body, h1, p {
     padding: 20px;
   }
   
-  /* Style the welcome message */
+
   h1 {
     color: #2c3e50;
     font-size: 3em;
     margin-bottom: 20px;
   }
   
-  /* Style the description paragraph */
+  
   p {
     font-size: 1.2em;
     max-width: 600px;
@@ -37,7 +37,7 @@ body, h1, p {
     line-height: 1.6;
   }
   
-  /* Button styling */
+ 
   .btn {
     display: inline-block;
     padding: 15px 30px;

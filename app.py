@@ -12,7 +12,7 @@ load_dotenv()
 print("JWT_SECRET_KEY from env:", os.getenv('JWT_SECRET_KEY'))
 print("SECRET_KEY from env:", os.getenv('SECRET_KEY'))
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path= '', static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
@@ -22,7 +22,7 @@ jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
 # CORS configuration - ensure 'credentials' is set to True for cookies/session usage
-CORS(app, resources={r"/*": {"origins": "https://heartfelt-duckanoo-f1c3ae.netlify.app/"}}, supports_credentials=True, expose_headers=["Authorization"])
+CORS(app, resources={r"/*": {"origins": "https://heartfelt-duckanoo-f1c3ae.netlify.app"}}, supports_credentials=True)
 
 # Todo Model
 class Todo(db.Model):
