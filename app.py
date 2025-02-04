@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -122,9 +122,17 @@ class Login:
         return jsonify({"msg": "Invalid credentials"}), 401
 
 # Signup Route - Create a new user
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'OPTIONS'])
 def signup_route():
-    return Signup.signup()
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "https://heartfelt-duckanoo-f1c3ae.netlify.app")
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+    else:
+
+      return Signup.signup()
 
 # Login Route - Authenticate user and return JWT token
 @app.route('/login', methods=['POST'])
@@ -179,4 +187,4 @@ def delete_todo(todo_id):
 
 if __name__ == '__main__':
     
-    app.run(debug=False)
+    app.run(debug=True)
