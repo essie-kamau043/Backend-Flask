@@ -35,6 +35,7 @@ const Login = ({ setToken }) => {
         localStorage.setItem("token", response.data.access_token);
         setUsername("");
         setPassword("");
+        toast.success("Login successful!", toastOptions);
         navigate("/todos");
       })
       .catch((error) => {
@@ -46,14 +47,15 @@ const Login = ({ setToken }) => {
   return (
     <div className="login-page">
       <div className="login-form">
-        <h1>Login</h1>
+        <h1>Welcome Back!</h1>
+        <p>Log in to continue managing your tasks.</p>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
             type="text"
             id="username"
             name="username"
-            placeholder="Username"
+            placeholder="Enter your username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -64,14 +66,14 @@ const Login = ({ setToken }) => {
             type="password"
             id="password"
             name="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button onClick={handleLogin}>Login</button>
+        <button onClick={handleLogin}>Log In</button>
         <p>
-          Don't have an account? <Link to="/signup">Sign up</Link>
+          Don't have an account? <Link to="/signup" className="link-btn">Sign Up</Link>
         </p>
       </div>
     </div>

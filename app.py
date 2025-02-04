@@ -2,15 +2,22 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from werkzeug.security import generate_password_hash, check_password_hash
+import bcrypt
 import re
 import os
+from dotenv import load_dotenv
 from flask_migrate import Migrate
+
+load_dotenv()
+print("JWT_SECRET_KEY from env:", os.getenv('JWT_SECRET_KEY'))
+print("SECRET_KEY from env:", os.getenv('SECRET_KEY'))
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'super-secret-key')
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
@@ -32,8 +39,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     todos = db.relationship('Todo', backref='user', lazy=True)
+    
+    
+
+
+
+
 # Helper function to validate passwords
 def validate_password(password):
     if len(password) < 8:
@@ -56,13 +69,14 @@ def generate_user_token(user_id):
 def create_tables():
     db.create_all()
 
-# Home Route
+# Landing Page
 @app.route('/')
-def home():
+def landing_page():
     if "username" in session:
         return render_template('base.html', username=session["username"])
     else:
-        return render_template('base.html')
+        return render_template('landing.html')
+
 
 # Signup Class
 class Signup:
@@ -80,15 +94,17 @@ class Signup:
         if password_error:
             return jsonify({"msg": password_error}), 400
 
-        existing_user_email = User.query.filter_by(username=email).first()  # Check for email uniqueness
-        existing_user_username = User.query.filter_by(username=username).first()  # Check for username uniqueness
+        
+        existing_user_email = User.query.filter_by(email=email).first()
+        existing_user_username = User.query.filter_by(username=username).first()
         if existing_user_email:
             return jsonify({"msg": "Email already exists"}), 400
         if existing_user_username:
             return jsonify({"msg": "Username already exists"}), 400
 
-        hashed_password = generate_password_hash(password)
-        new_user = User(username=username, password=hashed_password, email=email)  # Assuming you've added an email field to User model
+        # Hash the password with bcrypt
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        new_user = User(username=username, password=hashed_password, email=email)
         db.session.add(new_user)
         db.session.commit()
 
@@ -106,7 +122,7 @@ class Login:
 
         user = User.query.filter_by(username=username).first()
 
-        if user and check_password_hash(user.password, password):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
             access_token = create_access_token(identity=user.id)
             return jsonify(access_token=access_token), 200
 
@@ -169,5 +185,5 @@ def delete_todo(todo_id):
     return jsonify({'message': 'Task deleted'})
 
 if __name__ == '__main__':
-    # Make sure to set JWT_SECRET_KEY in your environment for production
+    # Make sure to set JWT_SECRET_KEY and SECRET_KEY in your environment for production
     app.run(debug=True)

@@ -1,0 +1,72 @@
+/* Reset some default styles for consistency */
+body, h1, p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Basic body styles */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  /* Center and style the container */
+  .landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Style the welcome message */
+  h1 {
+    color: #2c3e50;
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+  
+  /* Style the description paragraph */
+  p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  
+  /* Button styling */
+  .btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2em;
+    }
+    
+    p {
+      font-size: 1em;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      font-size: 0.9em;
+    }
+  }

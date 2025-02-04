@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button, ListGroup,  Nav, Tab } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, ListGroup, Nav, Tab } from "react-bootstrap";
 import './TodoList.css';
+
 const TodoList = ({ token, setToken }) => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
@@ -77,22 +78,22 @@ const TodoList = ({ token, setToken }) => {
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="todo-container">
       <Tab.Container id="left-tabs-example" defaultActiveKey="home">
         <Row>
           <Col sm={3}>
-            <Nav variant="pills" className="flex-column">
+            <Nav variant="pills" className="todo-nav flex-column">
               <Nav.Item>
-                <Nav.Link eventKey="home">Welcome back !</Nav.Link>
+                <Nav.Link eventKey="home" className="todo-nav-link">Welcome back!</Nav.Link>
               </Nav.Item>
               {!token && (
                 <Nav.Item>
-                  <Nav.Link eventKey="signup">Sign Up</Nav.Link>
+                  <Nav.Link eventKey="signup" className="todo-nav-link">Sign Up</Nav.Link>
                 </Nav.Item>
               )}
               {token && (
                 <Nav.Item>
-                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                  <Nav.Link onClick={handleLogout} className="todo-nav-link">Logout</Nav.Link>
                 </Nav.Item>
               )}
             </Nav>
@@ -100,50 +101,51 @@ const TodoList = ({ token, setToken }) => {
           <Col sm={9}>
             <Tab.Content>
               <Tab.Pane eventKey="home">
-                <h1 className="text-center mb-4">To-Do List</h1>
-                <Form className="mb-4">
+                <h1 className="text-center mb-4" style={{color: '#FF6B6B'}}>To-Do List</h1>
+                <Form className="mb-4 todo-form">
                   <Form.Group controlId="newTodo">
                     <Form.Control
                       type="text"
                       value={newTodo}
                       onChange={(e) => setNewTodo(e.target.value)}
                       placeholder="Enter a new task"
+                      className="form-control-lg"
+                      style={{backgroundColor: '#F4F9F9', borderColor: '#4ECDC4'}}
                     />
                   </Form.Group>
-                  <Button variant="primary" className="mt-2" onClick={handleAddTask}>
+                  <Button variant="success" className="mt-2 todo-button" onClick={handleAddTask}>
                     Add Task
                   </Button>
                 </Form>
-                <ListGroup>
+                <ListGroup className="todo-list">
                   <AnimatePresence>
                     {todos.map((todo) => (
                       <motion.div
                         key={todo.task_id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.3 }}
                       >
-                        <ListGroup.Item className="d-flex justify-content-between align-items-center">
-                          <span style={{ textDecoration: todo.done ? "line-through" : "none" }}>
+                        <ListGroup.Item className="todo-list-item d-flex justify-content-between align-items-center" style={{backgroundColor: todo.done ? '#D5F5E3' : '#FFF'}}>
+                          <span style={{ textDecoration: todo.done ? "line-through" : "none", color: todo.done ? '#58D68D' : '#333' }}>
                             {todo.name}
                           </span>
                           <div className="d-flex">
                             <Button
-                              variant="success"
+                              variant={todo.done ? "success" : "info"}
                               size="sm"
-                              bg={todo.done ? "success" : "warning"}
                               className="me-2"
                               onClick={() => handleToggleTask(todo.task_id)}
-                              style={{ cursor: "pointer" }}
+                              style={{ backgroundColor: todo.done ? '#58D68D' : '#4ECDC4', borderColor: todo.done ? '#58D68D' : '#4ECDC4', color: '#fff' }}
                             >
                               {todo.done ? "Done" : "Pending"}
                             </Button>
-
-
                             <Button
                               variant="danger"
                               size="sm"
                               onClick={() => handleDeleteTask(todo.task_id)}
+                              style={{backgroundColor: '#FF6B6B', borderColor: '#FF6B6B'}}
                             >
                               Delete
                             </Button>
@@ -155,9 +157,7 @@ const TodoList = ({ token, setToken }) => {
                 </ListGroup>
               </Tab.Pane>
               <Tab.Pane eventKey="signup">
-                {/* Here you would add your Signup component or form */}
-                <h2>Sign Up</h2>
-                {/* Placeholder for signup form */}
+                <h2 style={{color: '#4ECDC4'}}>Sign Up</h2>
                 <p>Sign up form goes here</p>
               </Tab.Pane>
             </Tab.Content>

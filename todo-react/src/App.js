@@ -6,8 +6,9 @@ import Login from "./Login";
 import Signup from "./Signup";
 import TodoList from "./TodoList";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ToastContainer, toast } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LandingPage from "./LandingPage";  // Import the new LandingPage component
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
@@ -53,10 +54,10 @@ const App = () => {
     <Router>
       <div className="container">
         <Routes>
-          {/* Redirect home page to login if not authenticated */}
+          {/* Landing page as the home route */}
           <Route
             path="/"
-            element={token ? <Navigate to="/todos" /> : <Navigate to="/login" />}
+            element={token ? <Navigate to="/todos" /> : <LandingPage />}  // Change to show LandingPage when not authenticated
           />
 
           <Route path="/login" element={<Login setToken={setToken} />} />
