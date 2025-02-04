@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SignupForm from './SignupForm';
 
+
+
+
 const Signup = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +17,7 @@ const Signup = () => {
     setIsLoading(true);
 
     axios
-      .post("http://127.0.0.1:5000/signup", formData)
+      .post("https://backend-flask-zg7r.onrender.com/signup", formData)
       .then((response) => {
         console.log("Signup successful!:", response.data);
         toast.success("Account created! Please login.", {

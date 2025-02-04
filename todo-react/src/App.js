@@ -8,8 +8,8 @@ import TodoList from "./TodoList";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LandingPage from "./LandingPage";  // Import the new LandingPage component
-
+import LandingPage from "./LandingPage"; 
+import "./App.css"
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 

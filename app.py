@@ -12,7 +12,6 @@ load_dotenv()
 print("JWT_SECRET_KEY from env:", os.getenv('JWT_SECRET_KEY'))
 print("SECRET_KEY from env:", os.getenv('SECRET_KEY'))
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,7 +21,8 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True, expose_headers=["Authorization"])
+# CORS configuration - ensure 'credentials' is set to True for cookies/session usage
+CORS(app, resources={r"/*": {"origins": "https://heartfelt-duckanoo-f1c3ae.netlify.app/"}}, supports_credentials=True, expose_headers=["Authorization"])
 
 # Todo Model
 class Todo(db.Model):
@@ -41,11 +41,6 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     todos = db.relationship('Todo', backref='user', lazy=True)
-    
-    
-
-
-
 
 # Helper function to validate passwords
 def validate_password(password):
@@ -77,7 +72,6 @@ def landing_page():
     else:
         return render_template('landing.html')
 
-
 # Signup Class
 class Signup:
     @staticmethod
@@ -94,7 +88,6 @@ class Signup:
         if password_error:
             return jsonify({"msg": password_error}), 400
 
-        
         existing_user_email = User.query.filter_by(email=email).first()
         existing_user_username = User.query.filter_by(username=username).first()
         if existing_user_email:
@@ -104,7 +97,7 @@ class Signup:
 
         # Hash the password with bcrypt
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        new_user = User(username=username, password=hashed_password, email=email)
+        new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
 
@@ -185,5 +178,5 @@ def delete_todo(todo_id):
     return jsonify({'message': 'Task deleted'})
 
 if __name__ == '__main__':
-    # Make sure to set JWT_SECRET_KEY and SECRET_KEY in your environment for production
-    app.run(debug=True)
+    
+    app.run(debug=False)

@@ -28,7 +28,7 @@ const Login = ({ setToken }) => {
   const handleLogin = () => {
     console.log("Attempting to login:", { username, password });
     axios
-      .post("http://127.0.0.1:5000/login", { username, password })
+      .post("https://backend-flask-zg7r.onrender.com/login", { username, password })
       .then((response) => {
         console.log("Login successful, response:", response.data);
         setToken(response.data.access_token);

@@ -14,7 +14,7 @@ const TodoList = ({ token, setToken }) => {
     // Fetch todos only if there's a token (user is logged in)
     if (token) {
       axios
-        .get("http://127.0.0.1:5000/api/todos", {
+        .get("", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => setTodos(response.data))
@@ -34,7 +34,7 @@ const TodoList = ({ token, setToken }) => {
 
     axios
       .post(
-        "http://127.0.0.1:5000/api/todos",
+        "https://backend-flask-zg7r.onrender.com/api/todos",
         { name: newTodo },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -47,7 +47,7 @@ const TodoList = ({ token, setToken }) => {
 
   const handleToggleTask = (task_id) => {
     axios
-      .put(`http://127.0.0.1:5000/api/todos/${task_id}`, {}, {
+      .put(`https://backend-flask-zg7r.onrender.com/api/todos/${task_id}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {
@@ -62,7 +62,7 @@ const TodoList = ({ token, setToken }) => {
 
   const handleDeleteTask = (task_id) => {
     axios
-      .delete(`http://127.0.0.1:5000/api/todos/${task_id}`, {
+      .delete(`https://backend-flask-zg7r.onrender.com/api/todos/${task_id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(() => {
